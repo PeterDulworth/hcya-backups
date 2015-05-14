@@ -1,0 +1,51 @@
+<?php ob_start();
+session_start();
+?>
+<html !DOCTYPE>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <title>Confirm Send</title>
+            <link rel="stylesheet" href="hcyaStyle.css">
+        </head>
+
+        <body>
+            <?php
+                $username = "login42007";
+                $password = "Lamborghini97!";
+                $hostname = "68.178.217.44";
+
+                $dbhandle = mysql_connect($hostname, $username, $password) or die("Could not connect to databasae");
+
+                $selected = mysql_select_db("login42007", $dbhandle);
+
+                $recipients   = $_POST['recipients'];
+                $subject      = $_POST['subject'];
+                $emailContent = $_POST['emailContent'];
+
+                //$emailContent = str_replace(" ","%20",$emailContent);
+                // $emailContent = nl2br($emailContent);
+
+                $_SESSION['recipients']   = $_POST['recipients'];
+                $_SESSION['subject']      = $_POST['subject'];
+                $_SESSION['emailContent'] = $emailContent;
+
+                $query = mysql_query("SELECT * FROM emailList");
+
+                $emailLink = "";
+
+                $emailLink = $emailLink.'<a class="pure-button pure-input-1-3" onclick="redirect()" href="mailto:';
+
+                while ($array = mysql_fetch_array($query)) {
+                	$emailLink = $emailLink.($array['Email'].",");
+                }
+
+                $emailLink          = $emailLink.$recipients.'?Subject='.$subject.'&Body='.$emailContent.'">Send</a>';
+                $_SESSION['mailto'] = $emailLink;
+
+                if (1 == 1) {header('location:admin_view.php');}
+
+                mysql_close();
+            ?>
+        </body>
+    </html>

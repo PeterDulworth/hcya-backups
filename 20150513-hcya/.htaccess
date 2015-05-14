@@ -1,0 +1,51 @@
+RewriteBase /
+RewriteEngine on
+
+#ErrorDocument 404 http://nickdulworth.com/p/d/hcya404.php
+ErrorDocument 404 http://hcyalions.com/hcya404.php
+
+
+#doesn’t require .html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html
+
+#doesn’t require .php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php
+
+#doesn’t require .css
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.css -f
+RewriteRule ^(.*)$ $1.css
+
+##########################REDIRECT################################
+
+#redirects iPhone users to subdomain.
+#RewriteCond %{HTTP_USER_AGENT} iPad|iPhone
+#RewriteRule .* http://nickdulworth.com/p/m/index.html/ [R]
+
+#redirects iPhone users to sub directory.
+RewriteCond %{HTTP_USER_AGENT} iPad|iPhone
+#RewriteCond %{REQUEST_URI} !^/p/m/
+#RewriteRule .* /p/m/ [R]
+RewriteCond %{REQUEST_URI} !^/mobile/
+RewriteRule .* /mobile/ [R]
+
+#################################################################
+
+# Turn Rewrite Engine On
+# RewriteEngine on
+
+# Rewrite for index.php
+RewriteRule ^custom index.php [NC,L]
+# NC makes the rule non case sensitive
+# L makes this the last rule that this specific condition will match
+
+# Rewrite for user.php?u=xxxxx
+# RewriteRule ^user/([0-9a-zA-Z]+) user.php?u=$1 [NC,L]
+# Regular Expression Logic.[0-9a-zA-Z] means you are allowed: 0-9, a-z and A-Z in that part of the URL. + lets it be an undetermined string length.
+
+# Rewrite for article.php?id=1&title=Title-Goes-Here
+# RewriteRule ^article/([0-9])/([0-9a-zA-Z_-]+) article.php?id=$1&title=$2 [NC,L]
